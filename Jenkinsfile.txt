@@ -13,7 +13,7 @@ pipeline{
 		stage ('Compile Stage'){
 
 			steps {
-				withMaven(maven : 'default'){
+				withMaven(maven : 'Maven'){
 					sh 'mvn clean compile'
 				}
 			}
@@ -21,7 +21,7 @@ pipeline{
 		stage ('Testing Stage'){
 
 			steps {
-				withMaven(maven : 'default'){
+				withMaven(maven : 'Maven'){
 					sh 'mvn test'
 				}
 			}
@@ -39,7 +39,7 @@ pipeline{
 		stage ('Install Stage'){
 
 			steps {
-				withMaven(maven : 'default'){
+				withMaven(maven : 'Maven'){
 				sh 'mvn install'
 				}
 			}
@@ -48,11 +48,11 @@ pipeline{
 		
 			steps{
 				script {
-					def server = Artifactory.server('default')
+					def server = Artifactory.server('ART')
 					def rtMaven = Artifactory.newMavenBuild()
 					
 					rtMaven.deployer server: server, releaseRepo: 'gunika', snapshotRepo: 'gunika'
-					rtMaven.tool = 'default'
+					rtMaven.tool = 'Maven'
 					def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'install'
 					server.publishBuildInfo buildInfo
 					}
