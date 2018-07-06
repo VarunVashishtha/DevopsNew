@@ -5,7 +5,9 @@ pipeline{
 	
 		stage('LOG') {
       		     steps {
+		     	     echo 'Hello, world!'
            		     logstashSend failBuild: true, maxLines: 1000
+			     echo 'Bye, world!'
        			    }
 			    }
 		stage ('Compile Stage'){
