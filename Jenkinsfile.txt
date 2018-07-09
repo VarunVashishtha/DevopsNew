@@ -32,21 +32,6 @@ pipeline{
        			    }
 			    }
 		
-		stage ('Artifactory Deploy'){
-		
-			steps{
-				script {
-					def server = Artifactory.server('ART')
-					def rtMaven = Artifactory.newMavenBuild()
-					
-					rtMaven.deployer server: server, releaseRepo: 'gunika', snapshotRepo: 'gunika'
-					rtMaven.tool = 'Maven'
-					def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'install'
-					server.publishBuildInfo buildInfo
-					}
-				}
-		}
-
 		
 	}
 }
