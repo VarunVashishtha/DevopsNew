@@ -4,22 +4,15 @@ pipeline{
 	stages{
 	
 
-		stage ('Compile Stage'){
+		stage ('Build Stage'){
 
 			steps {
 				withMaven(maven : 'Maven'){
-					bat 'mvn clean compile'
+					bat 'mvn clean install'
 				}
 			}
 		}
-		stage ('Testing Stage'){
-
-			steps {
-				withMaven(maven : 'Maven'){
-					bat 'mvn test'
-				}
-			}
-		}
+		
 		stage ('SonarQube Analysis'){
 		
 			steps{
@@ -38,14 +31,7 @@ pipeline{
 			     echo 'Bye, world!'
        			    }
 			    }
-		stage ('Install Stage'){
-
-			steps {
-				withMaven(maven : 'Maven'){
-				bat 'mvn install'
-				}
-			}
-		}
+		
 		stage ('Artifactory Deploy'){
 		
 			steps{
