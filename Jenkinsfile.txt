@@ -6,7 +6,7 @@ pipeline{
 		stage ('Test and Build'){
 
 			steps {
-				withMaven(maven : 'default'){
+				withMaven(maven : 'Maven'){
 					sh 'mvn install'
 				}
 			}
@@ -27,11 +27,11 @@ pipeline{
 		
 			steps{
 				script {
-					def server = Artifactory.server('default')
+					def server = Artifactory.server('ART')
 					def rtMaven = Artifactory.newMavenBuild()
 					
 					rtMaven.deployer server: server, releaseRepo: 'gunika', snapshotRepo: 'gunika'
-					rtMaven.tool = 'default'
+					rtMaven.tool = 'Maven'
 					def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'install'
 					server.publishBuildInfo buildInfo
 					}
