@@ -7,7 +7,7 @@ pipeline{
 
 			steps {
 				withMaven(maven : 'Maven'){
-					sh 'mvn install'
+					bat 'mvn install'
 				}
 			}
 		}
@@ -17,7 +17,7 @@ pipeline{
 			steps{
 			
 				withSonarQubeEnv('sonarqube') {
-					sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
+					bat 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar'
 
 				}
 			}
@@ -41,23 +41,25 @@ pipeline{
 		stage('Docker Image Release') {
       
             steps {
-             		sh 'wget -O HelloDevOps.war http://10.127.126.113:8040/artifactory/gunika/com/nagarro/devops/training/2018/gunika/pipelines/helloDevops/0.0.1-SNAPSHOT/helloDevops-0.0.1-SNAPSHOT.war'
-               		sh 'docker build -t i_gunika_hellodevops .'
+             		bat 'wget -O HelloDevOps.war http://10.127.126.113:8040/artifactory/gunika/com/nagarro/devops/training/2018/gunika/pipelines/helloDevops/0.0.1-SNAPSHOT/helloDevops-0.0.1-SNAPSHOT.war'
+               		bat 'docker build -t i_gunika_hellodevops .'
                   }
         }
 
 		stage('Docker Deployment') {
       
             steps {
-                	sh 'docker run --name c_gunika_hellodevops -d -p 9690:8080 i_gunika_hellodevops'
+                	bat 'docker run --name c_gunika_hellodevops -d -p 9690:8080 i_gunika_hellodevops'
                   }
         }
 
         stage('Setup ELK') {
       		steps{
-		     	    sh 'docker run -d -p 9200:9200 -it -h elasticsearch --name c_elasticsearch elasticsearch'
-		     	    sh 'docker run -d -p 5601:5601 -h kibana --name c_kibana --link c_elasticsearch:elasticsearch kibana'
-		     	    sh 'sleep 30'
+		     	    bat '''
+			    docker run -d -p 9200:9200 -it -h elasticsearch --name c_elasticsearch elasticsearch
+		     	    docker run -d -p 5601:5601 -h kibana --name c_kibana --link c_elasticsearch:elasticsearch kibana
+		     	     sleep 30
+			     '''
            		    logstashSend failBuild: true, maxLines: 1000
 
        		}
