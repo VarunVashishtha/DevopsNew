@@ -1,0 +1,24 @@
+pipeline {
+    agent any 
+     tools {
+    maven 'm3'
+  }
+    stages {
+        stage('Clone') { 
+            steps {
+               // sh "rm -rf hello"
+               // sh "git clone  https://github.com/VarunVashishtha/hello.git"
+                sh "mvn clean"            }
+        }
+        stage('Build') { 
+            steps {
+                 sh "mvn install"
+            }
+        }
+        stage('Package') { 
+            steps {
+                 sh "mvn package"
+            }
+        }
+    }
+}
