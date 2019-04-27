@@ -4,7 +4,7 @@ pipeline {
     maven 'm3'
   }
     stages {
-        stage('Clone') { 
+         stage('Clone') { 
             steps {
                // sh "rm -rf hello"
                // sh "git clone  https://github.com/VarunVashishtha/hello.git"
